@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ลงชื่อเข้างาน - กัญชลี 101</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        alert("เบราว์เซอร์ไม่รองรับการใช้งาน GPS");
+      }
+    }
+
+    function showPosition(position) {
+      document.getElementById("lat").value = position.coords.latitude;
+      document.getElementById("lng").value = position.coords.longitude;
+    }
+
+    function showError(error) {
+      alert("ไม่สามารถดึงพิกัดได้: " + error.message);
+    }
+  </script>
+</head>
+<body onload="getLocation()">
+  <h2>เข้างาน - ร้านกัญชลี 101</h2>
+  <form method="POST" action="https://script.google.com/macros/s/AKfycbwk0uNzwTVOvUhdkCp7pQlBAbujCnH-UxdDSl8Ezyzd/dev" enctype="multipart/form-data">
+    <input type="hidden" name="type" value="เข้างาน">
+    <label>ชื่อพนักงาน:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>เลือกเวลา:</label><br>
+    <select name="time_choice" required>
+      <option value="10:00">10:00</option>
+      <option value="11:00">11:00</option>
+      <option value="15:30">15:30</option>
+    </select><br><br>
+
+    <label>แนบรูปภาพ:</label><br>
+    <input type="file" name="photo" accept="image/*" capture="environment" required><br><br>
+
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lng" id="lng">
+
+    <input type="submit" value="ส่งข้อมูล">
+  </form>
+</body>
+</html>
