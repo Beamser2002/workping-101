@@ -2,43 +2,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ลงชื่อเข้างาน - กัญชลี 101</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>ลงชื่อเข้างาน</title>
   <script>
     function getLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
+        navigator.geolocation.getCurrentPosition(function(position) {
+          document.getElementById('lat').value = position.coords.latitude;
+          document.getElementById('lng').value = position.coords.longitude;
+        });
       } else {
         alert("เบราว์เซอร์ไม่รองรับการใช้งาน GPS");
       }
     }
 
-    function showPosition(position) {
-      document.getElementById("lat").value = position.coords.latitude;
-      document.getElementById("lng").value = position.coords.longitude;
-    }
-
-    function showError(error) {
-      alert("ไม่สามารถดึงพิกัดได้: " + error.message);
+    function encodeImageFileAsURL(element) {
+      var file = element.files[0];
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        document.getElementById("photo").value = reader.result;
+      }
+      reader.readAsDataURL(file);
     }
   </script>
 </head>
 <body onload="getLocation()">
-  <h2>เข้างาน - ร้านกัญชลี 101</h2>
-  <form method="POST" action="https://script.google.com/macros/s/AKfycbzx-aIu2MR_9g4LwMFkj0qutammZ3q1B00C4h9IVxWwkbgUuND4mmK3C-MRoJU2MtlmXg/exec" enctype="multipart/form-data">
-    <input type="hidden" name="type" value="เข้างาน">
+  <h2>ลงชื่อเข้างาน - ร้านกัญชลี 101</h2>
+  <form method="POST" action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
     <label>ชื่อพนักงาน:</label><br>
     <input type="text" name="name" required><br><br>
 
+    <input type="hidden" name="type" value="เข้างาน">
+
     <label>เลือกเวลา:</label><br>
     <select name="time_choice" required>
+      
       <option value="10:00">10:00</option>
       <option value="11:00">11:00</option>
       <option value="15:30">15:30</option>
+    
     </select><br><br>
 
-    <label>แนบรูปภาพ:</label><br>
-    <input type="file" name="photo" accept="image/*" capture="environment" required><br><br>
+    <label>แนบรูปถ่าย:</label><br>
+    <input type="file" accept="image/*" onchange="encodeImageFileAsURL(this)" required><br><br>
+    <input type="hidden" name="photo" id="photo">
 
     <input type="hidden" name="lat" id="lat">
     <input type="hidden" name="lng" id="lng">
