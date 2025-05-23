@@ -1,56 +1,37 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>ลงชื่อออกงาน</title>
-  <script>
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          document.getElementById('lat').value = position.coords.latitude;
-          document.getElementById('lng').value = position.coords.longitude;
-        });
-      } else {
-        alert("เบราว์เซอร์ไม่รองรับการใช้งาน GPS");
-      }
-    }
-
-    function encodeImageFileAsURL(element) {
-      var file = element.files[0];
-      var reader = new FileReader();
-      reader.onloadend = function() {
-        document.getElementById("photo").value = reader.result;
-      }
-      reader.readAsDataURL(file);
-    }
-  </script>
+  <meta charset="UTF-8" />
+  <title>WorkPing Time - ออกงาน</title>
 </head>
-<body onload="getLocation()">
-  <h2>ลงชื่อออกงาน - ร้านกัญชลี 101</h2>
-  <form method="POST" action="https://script.google.com/macros/s/AKfycbzr4yNOsz3QX7by72E49Kvh3Z86a9DSayk9F2dN2_fgqHygJfTtEjylxlkCI3WYItOUkg/exec">
-    <label>ชื่อพนักงาน:</label><br>
-    <input type="text" name="name" required><br><br>
-
-    <input type="hidden" name="type" value="ออกงาน">
-
-    <label>เลือกเวลา:</label><br>
-    <select name="time_choice" required>
-      
-      <option value="22:00">22:00</option>
-      <option value="23:00">23:00</option>
-      <option value="23:00+">23:00+</option>
-    
-    </select><br><br>
-
-    <label>แนบรูปถ่าย:</label><br>
-    <input type="file" accept="image/*" onchange="encodeImageFileAsURL(this)" required><br><br>
-    <input type="hidden" name="photo" id="photo">
-
-    <input type="hidden" name="lat" id="lat">
-    <input type="hidden" name="lng" id="lng">
-
-    <input type="submit" value="ส่งข้อมูล">
+<body>
+  <h2>WorkPing Time: ออกงาน</h2>
+  <form id="form">
+    <label>ชื่อพนักงาน:
+      <input type="text" name="name" required />
+    </label><br><br>
+    <label>เวลาออกงาน: <select name="time"><option>22:00</option><option>23:00</option></select></label><br><br>
+    <input type="hidden" name="status" value="ออกงาน" />
+    <input type="hidden" id="latitude" name="latitude" />
+    <input type="hidden" id="longitude" name="longitude" />
+    <input type="file" accept="image/*" capture="user" name="photo" required /><br><br>
+    <button type="submit">✅ ส่งข้อมูล</button>
   </form>
+  <script>
+    navigator.geolocation.getCurrentPosition(pos => {
+      document.getElementById('latitude').value = pos.coords.latitude;
+      document.getElementById('longitude').value = pos.coords.longitude;
+    });
+
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec", {
+        method: "POST",
+        body: formData
+      }).then(res => res.text()).then(alert);
+    });
+  </script>
 </body>
 </html>
