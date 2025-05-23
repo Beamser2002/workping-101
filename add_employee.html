@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>เพิ่มพนักงานใหม่ - WorkPing</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #ccc;
+      width: 100%;
+      max-width: 400px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    h2 { text-align: center; }
+  </style>
+</head>
+<body>
+  <form onsubmit="submitForm(event)">
+    <h2>➕ เพิ่มพนักงานใหม่</h2>
+    <input type="text" id="name" placeholder="ชื่อพนักงาน" required>
+    <input type="text" id="password" placeholder="รหัสผ่าน" required>
+    <button type="submit">บันทึกข้อมูล</button>
+  </form>
+
+  <script>
+    function submitForm(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const password = document.getElementById("password").value;
+
+      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec", {
+        method: "POST",
+        body: new URLSearchParams({
+          action: "add_employee",
+          name: name,
+          password: password
+        })
+      })
+      .then(res => res.text())
+      .then(text => alert(text));
+    }
+  </script>
+</body>
+</html>
