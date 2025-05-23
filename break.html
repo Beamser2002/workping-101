@@ -3,7 +3,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>WorkPing Time: ออกงาน</title>
+  <title>WorkPing Time: กลับจากพัก</title>
   <style>
     body {
       font-family: sans-serif;
@@ -44,23 +44,17 @@
 </head>
 <body>
   <form id="form">
-    <h2>📌 WorkPing Time - ออกงาน</h2>
+    <h2>📌 WorkPing Time - กลับจากพัก</h2>
     <label>ชื่อพนักงาน</label>
     <input type="text" name="name" required>
     
-<label>เวลาออกงาน</label>
-<select name="time" required>
-  <option>22:00</option>
-  <option>23:00</option>
-</select>
-
     <label>ถ่ายรูป</label>
     <video id="video" autoplay playsinline></video>
     <input type="hidden" name="photoData" id="photoData">
     <button type="button" onclick="capture()">📸 ถ่ายรูป</button>
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
-    <input type="hidden" name="status" value="ออกงาน">
+    <input type="hidden" name="status" value="กลับจากพัก">
     <button type="submit">✅ ส่งข้อมูล</button>
   </form>
   <canvas id="canvas" style="display:none;"></canvas>

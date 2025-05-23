@@ -2,32 +2,102 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <title>WorkPing Time - เข้างาน</title>
+  <meta charset="UTF-8">
+  <title>WorkPing Time: เข้างาน</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      padding: 50px;
+    }
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #ccc;
+      max-width: 500px;
+      width: 100%;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+    button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    video {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h2>WorkPing Time: เข้างาน</h2>
-  <form id="form">
-    <label>ชื่อพนักงาน:
-      <input type="text" name="name" required />
-    </label><br><br>
-    <label>เวลาเข้างาน: <select name="time"><option>10:00</option><option>11:00</option><option>15:30</option></select></label><br><br>
-    <input type="hidden" name="status" value="เข้างาน" />
-    <input type="hidden" id="latitude" name="latitude" />
-    <input type="hidden" id="longitude" name="longitude" />
-    <input type="file" accept="image/*" capture="user" name="photo" required /><br><br>
+  <form id="checkinForm">
+    <h2>📌 WorkPing Time - เข้างาน</h2>
+
+    <label>ชื่อพนักงาน</label>
+    <input type="text" name="name" required>
+
+    <label>เวลาเข้างาน</label>
+    <select name="time" required>
+      <option>10:00</option>
+      <option>11:00</option>
+      <option>15:30</option>
+    </select>
+
+    <label>ถ่ายรูป</label>
+    <video id="video" autoplay playsinline></video>
+    <input type="hidden" name="photoData" id="photoData">
+    <button type="button" onclick="capture()">📸 ถ่ายรูป</button>
+
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    <input type="hidden" name="status" value="เข้างาน">
+
     <button type="submit">✅ ส่งข้อมูล</button>
   </form>
+
+  <canvas id="canvas" style="display:none;"></canvas>
+
   <script>
+    // เปิดกล้อง
+    const video = document.getElementById('video');
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+      .then(stream => { video.srcObject = stream });
+
+    // ดึงพิกัด
     navigator.geolocation.getCurrentPosition(pos => {
       document.getElementById('latitude').value = pos.coords.latitude;
       document.getElementById('longitude').value = pos.coords.longitude;
     });
 
-    document.getElementById('form').addEventListener('submit', e => {
+    // ถ่ายรูป
+    function capture() {
+      const canvas = document.getElementById('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      const dataURL = canvas.toDataURL('image/png');
+      document.getElementById('photoData').value = dataURL;
+      alert("✅ ถ่ายรูปแล้วพร้อมส่งข้อมูล");
+    }
+
+    // ส่งฟอร์ม
+    document.getElementById('checkinForm').addEventListener('submit', e => {
       e.preventDefault();
       const formData = new FormData(e.target);
-      fetch("https://script.google.com/macros/s/AKfycbzCTEXuCqmc-vhfPM633M9v85br3cr6mMTKWfQGNn4K2vS7cWkUwGSZaFXyV0b3Utqzfw/exec", {
+      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec", {
         method: "POST",
         body: formData
       }).then(res => res.text()).then(alert);
