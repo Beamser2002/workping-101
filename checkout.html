@@ -27,7 +27,7 @@
     document.getElementById('form').addEventListener('submit', e => {
       e.preventDefault();
       const formData = new FormData(e.target);
-      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzCTEXuCqmc-vhfPM633M9v85br3cr6mMTKWfQGNn4K2vS7cWkUwGSZaFXyV0b3Utqzfw/exec", {
         method: "POST",
         body: formData
       }).then(res => res.text()).then(alert);
